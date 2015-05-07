@@ -48,6 +48,8 @@ int16_t ax, ay, az;
 int16_t gx, gy, gz;
 int16_t mx, my, mz;
 
+int Cax, Cay, Caz, Cgx, Cgy, Cgz, Cmx, Cmy, Cmz;
+
 #define LED_PIN 13
 bool blinkState = false;
 const int buttonPin01 = 2;
@@ -90,6 +92,10 @@ void loop() {
     // display tab-separated accel/gyro x/y/z values
     //Serial.print("a/g/m:\t");
     
+    //Cax = runningAverage(ax);
+    
+    //ax = ax - Cax;
+        
     Serial.print(map(ax, 0, 65535, 0, 359)-1); Serial.print(", ");
     Serial.print(map(ay, 0, 65535, 0, 359)+1); Serial.print(", ");
     Serial.print(map(az, 0, 65535, 0, 359)-85); Serial.print(", ");
@@ -115,4 +121,19 @@ void loop() {
     
     Serial.flush();
     delay(1000);
+}
+
+long runningAverage(int M){
+  static int LM[25];
+  static byte index = 0;
+  static long sum = 0;
+  static byte count = 0;
+  
+  sum -= LM[index];
+  LM[index] = M;
+  sum += LM[index];
+  index = index % LMSIZE;
+  if (count < LMSIZE) count++;
+  
+  return sum / count;
 }
