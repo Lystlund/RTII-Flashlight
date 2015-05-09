@@ -33,7 +33,7 @@ public class MouseLook : MonoBehaviour {
 	public Light flashlight;
 	public GameObject Player;
 	public int Potentiometer;
-
+	public float time;
 
 	void Start ()
 	{
@@ -45,7 +45,10 @@ public class MouseLook : MonoBehaviour {
 	}
 
 	void Update ()
-	{		
+	{	
+		time += Time.fixedDeltaTime * 2;
+
+
 		if (axes == RotationAxes.MouseXAndY)
 		{
 			float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
@@ -70,7 +73,10 @@ public class MouseLook : MonoBehaviour {
 
 
 			if (Input.GetKey (KeyCode.Q)|| (int.Parse(ArdInput.vec[9])) == 1) {
-				flashlight.enabled = !flashlight.enabled;
+				if (time > 0.2){
+					flashlight.enabled = !flashlight.enabled;
+					time = 0;
+				}
 			}
 		}
 
