@@ -107,7 +107,7 @@ void loop() {
       Serial.print(0); Serial.print(",");
     }
     
-    Serial.println(map(potentiometer, 0, 670, 0, 10));
+    Serial.println(map(potentiometer, 0, 670, 0, 100));
     
     // blink LED to indicate activity
     blinkState = !blinkState;

@@ -76,8 +76,8 @@ public class MouseLook : MonoBehaviour {
 
 		Potentiometer = int.Parse (ArdInput.vec [10]);
 
-		flashlight.spotAngle = Mathf.Lerp (45, 15, Remap(Potentiometer, 0, 9, 0, 1));
-		flashlight.range = Mathf.Lerp (15, 45, Remap(Potentiometer, 0, 9, 0, 1));
+		flashlight.spotAngle = Mathf.Lerp (45, 15, Remap(Potentiometer, 0, 99, 0, 1));
+		flashlight.range = Mathf.Lerp (15, 45, Remap(Potentiometer, 0, 99, 0, 1));
 
 	}
 
