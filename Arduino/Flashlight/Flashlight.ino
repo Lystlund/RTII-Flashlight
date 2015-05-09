@@ -89,14 +89,8 @@ void loop() {
     float potentiometer = analogRead(A1);
 
 
-    // display tab-separated accel/gyro x/y/z values
-    //Serial.print("a/g/m:\t");
-    
-    //Cax = runningAverage(ax);
-    
-    //ax = ax - Cax;
-        
-    Serial.print(map(ax, 0, 65535, 0, 359)-1); Serial.print(", ");
+    // display tab-separated accel/gyro x/y/z values & button & potentiometer        
+    Serial.print(map(ax, 0, 65535, 0, 359)); Serial.print(", ");
     Serial.print(map(ay, 0, 65535, 0, 359)+1); Serial.print(", ");
     Serial.print(map(az, 0, 65535, 0, 359)-85); Serial.print(", ");
     Serial.print(map(gx, 0, 65535, 0, 359)); Serial.print(", ");
@@ -107,7 +101,7 @@ void loop() {
     Serial.print(map(mz, 0, 4095, 0, 359)-2); Serial.print(",");
     
     if (digitalRead(buttonPin01) == HIGH){
-      Serial.print(1); Serial.print(","); 
+      Serial.print(1); Serial.print(",");
     }
     else{
       Serial.print(0); Serial.print(",");
@@ -120,20 +114,5 @@ void loop() {
     digitalWrite(LED_PIN, blinkState);
     
     Serial.flush();
-    delay(1000);
-}
-
-long runningAverage(int M){
-  static int LM[25];
-  static byte index = 0;
-  static long sum = 0;
-  static byte count = 0;
-  
-  sum -= LM[index];
-  LM[index] = M;
-  sum += LM[index];
-  index = index % LMSIZE;
-  if (count < LMSIZE) count++;
-  
-  return sum / count;
+    delay(40);
 }

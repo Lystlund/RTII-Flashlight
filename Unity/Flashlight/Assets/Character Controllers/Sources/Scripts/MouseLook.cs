@@ -32,17 +32,7 @@ public class MouseLook : MonoBehaviour {
 	private ArduinoInput ArdInput;
 	public Light flashlight;
 	public GameObject Player;
-	private float valToBeLerped = 0;
-	private float tParam = 0;
-	private float Speed = 1f;
-	private bool trigger = false;
-	private bool trigger2 = false;
-	private float currentVal;
-
-	// // // // // // // // // // // // // 
-	// Find en måde at reset tParam, tilbage til 0 når Q bliver trykket på/sluppet
-	//
-	// // // // // // // // // // // // // 
+	public int Potentiometer;
 
 
 	void Start ()
@@ -78,46 +68,20 @@ public class MouseLook : MonoBehaviour {
 			
 			transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
 
-			currentVal = valToBeLerped;
 
-			if (Input.GetKey (KeyCode.Q) || (int.Parse(ArdInput.vec[9])) == 1) {
-				rotationY = 0;
-				transform.localEulerAngles = new Vector3(0,0,0);
-
-				if (trigger2 == true){
-					trigger2 = false;
-					tParam = 0;
-					trigger = true;
-				}
-			}
-
-			if (Input.GetKey(KeyCode.Q) == false && (int.Parse(ArdInput.vec[9])) == 0){
-				if (trigger2 == false){
-					trigger = false;
-					tParam = 0;
-					trigger2 = true;
-				}
-			}
-
-			if (trigger){
-				if (tParam < 1){
-					tParam += Time.deltaTime * Speed;
-					valToBeLerped = Mathf.Lerp(currentVal,10,tParam);
-
-					flashlight.range = 25;
-					flashlight.spotAngle = valToBeLerped;
-				}
-			}
-
-			if (trigger == false){
-				if (tParam < 1){
-					tParam += Time.deltaTime * Speed;
-					valToBeLerped = Mathf.Lerp(currentVal,45,tParam);
-
-					flashlight.range = 25;
-					flashlight.spotAngle = valToBeLerped;
-				}
+			if (Input.GetKey (KeyCode.Q)|| (int.Parse(ArdInput.vec[9])) == 1) {
+				flashlight.enabled = !flashlight.enabled;
 			}
 		}
+
+		Potentiometer = int.Parse (ArdInput.vec [10]);
+
+		flashlight.spotAngle = Mathf.Lerp (45, 15, Remap(Potentiometer, 0, 9, 0, 1));
+		flashlight.range = Mathf.Lerp (15, 45, Remap(Potentiometer, 0, 9, 0, 1));
+
+	}
+
+	private float Remap(float input, float from1, float to1, float from2, float to2){
+		return (input - from1) / (to1 - from1) * (to2 - from2) + from2;
 	}
 }
