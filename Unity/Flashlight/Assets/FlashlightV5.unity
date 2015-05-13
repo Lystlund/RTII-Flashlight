@@ -1703,7 +1703,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11456724, guid: 72ca79888426b2a4194251b432d30524, type: 2}
       propertyPath: sensitivityX
-      value: -.200000003
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 11456724, guid: 72ca79888426b2a4194251b432d30524, type: 2}
       propertyPath: flashlight
@@ -1720,6 +1720,10 @@ Prefab:
     - target: {fileID: 10870268, guid: 72ca79888426b2a4194251b432d30524, type: 2}
       propertyPath: m_Range
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 11466456, guid: 72ca79888426b2a4194251b432d30524, type: 2}
+      propertyPath: sensitivityY
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 72ca79888426b2a4194251b432d30524, type: 2}
@@ -2532,7 +2536,7 @@ MeshCollider:
   serializedVersion: 2
   m_Convex: 0
   m_Mesh: {fileID: 4300028, guid: c3d9971e6dbfd8e4bb7130c80178b423, type: 3}
---- !u!108 &2109410693
+--- !u!108 &2109410693 stripped
 Light:
   m_PrefabParentObject: {fileID: 10870268, guid: 72ca79888426b2a4194251b432d30524,
     type: 2}

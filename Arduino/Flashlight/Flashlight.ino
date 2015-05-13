@@ -48,11 +48,12 @@ int16_t ax, ay, az;
 int16_t gx, gy, gz;
 int16_t mx, my, mz;
 
-int acc[] = {ax, ay, ax};
-int gyro[] = {gx, gy, gz};
-int mag[] = {mx, my, mz};
-int Ypitch;
-int xRoll;
+float yPitch;
+float xRoll;
+short acc[2];
+short gyro[2];
+short mag[2];
+
 
 #define ACCELEROMETER_SENSITIVITY 8192.0
 #define GYROSCOPE_SENSITIVITY 65.536
@@ -98,11 +99,11 @@ void loop() {
     //accelgyro.getRotation(&gx, &gy, &gz);
     float potentiometer = analogRead(A1);
     
-    void ComplementaryFilter(short acc[3], short gyro[3], float *Ypitch, float *xRoll);
-    
-    Serial.print(Ypitch);Serial.print(", ");
-    Serial.println(xRoll);
-    /*
+    //short acc[] = {ax, ay, ax};
+    //short gyro[] = {gx, gy, gz};
+    //short mag[] = {mx, my, mz};
+ 
+ 
     // display tab-separated accel/gyro x/y/z values & button & potentiometer        
     Serial.print(map(ax, 0, 65535, 0, 359)); Serial.print(", ");
     Serial.print(map(ay, 0, 65535, 0, 359)+1); Serial.print(", ");
@@ -112,17 +113,18 @@ void loop() {
     Serial.print(map(gz, 0, 65535, 0, 359)); Serial.print(", ");
     Serial.print(map(mx, 0, 4095, 0, 359)+9); Serial.print(", ");
     Serial.print(map(my, 0, 4095, 0, 359)+5); Serial.print(", ");
-    Serial.print(map(mz, 0, 4095, 0, 359)-2); Serial.print(",");
+    Serial.print(map(mz, 0, 4095, 0, 359)-2); Serial.print(", ");
     
     if (digitalRead(buttonPin01) == HIGH){
-      Serial.print(1); Serial.print(",");
+      Serial.print(1); Serial.print(", ");
     }
     else{
-      Serial.print(0); Serial.print(",");
+      Serial.print(0); Serial.print(", ");
     }
     
-    Serial.println(map(potentiometer, 0, 670, 0, 100));
-   */
+    Serial.print(map(potentiometer, 0, 670, 0, 100)); Serial.print(", ");
+    ComplementaryFilter(ax, ay, az, gx, gy, yPitch, xRoll);  
+   
     // blink LED to indicate activity
     blinkState = !blinkState;
     digitalWrite(LED_PIN, blinkState);
@@ -131,25 +133,29 @@ void loop() {
     delay(41);
 }
 
-void ComplementaryFilter(short accData[3], short gyrData[3], float *pitch, float *roll)
+void ComplementaryFilter(int ax, int ay, int az, int gx, int gy, float pitch, float roll)
 {
     float pitchAcc, rollAcc;               
  
     // Integrate the gyroscope data -> int(angularSpeed) = angle
-    *pitch += ((float)gyrData[0] / GYROSCOPE_SENSITIVITY) * dt; // Angle around the X-axis
-    *roll -= ((float)gyrData[1] / GYROSCOPE_SENSITIVITY) * dt;    // Angle around the Y-axis
+    pitch += ((float)gx / GYROSCOPE_SENSITIVITY) * dt; // Angle around the X-axis
+    roll -= ((float)gy / GYROSCOPE_SENSITIVITY) * dt;    // Angle around the Y-axis
  
     // Compensate for drift with accelerometer data if !bullshit
     // Sensitivity = -2 to 2 G at 16Bit -> 2G = 32768 && 0.5G = 8192
-    int forceMagnitudeApprox = abs(accData[0]) + abs(accData[1]) + abs(accData[2]);
+    int forceMagnitudeApprox = abs(ax) + abs(ay) + abs(az);
     if (forceMagnitudeApprox > 8192 && forceMagnitudeApprox < 32768)
     {
 	// Turning around the X axis results in a vector on the Y-axis
-        pitchAcc = atan2f((float)accData[1], (float)accData[2]) * 180 / M_PI;
-        *pitch = *pitch * 0.98 + pitchAcc * 0.02;
+        pitchAcc = atan2f((float)ay, (float)az) * 180 / M_PI;
+        pitch = pitch * 0.98 + pitchAcc * 0.02;
  
 	// Turning around the Y axis results in a vector on the X-axis
-        rollAcc = atan2f((float)accData[0], (float)accData[2]) * 180 / M_PI;
-        *roll = *roll * 0.98 + rollAcc * 0.02;
-    }
+        rollAcc = atan2f((float)ax, (float)az) * 180 / M_PI;
+        roll = roll * 0.98 + rollAcc * 0.02;
+    }    
+    
+    Serial.print(pitch); Serial.print(", ");
+    Serial.println(roll);
+    
 } 
