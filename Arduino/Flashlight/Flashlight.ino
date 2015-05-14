@@ -105,20 +105,19 @@ void loop() {
  
  
     // display tab-separated accel/gyro x/y/z values & button & potentiometer        
-    Serial.print(map(ax, 0, 65535, 0, 359)); Serial.print(", ");
-    Serial.print(map(ay, 0, 65535, 0, 359)+1); Serial.print(", ");
-    Serial.print(map(az, 0, 65535, 0, 359)-85); Serial.print(", ");
-    Serial.print(map(gx, 0, 65535, 0, 359)); Serial.print(", ");
-    Serial.print(map(gy, 0, 65535, 0, 359)+1); Serial.print(", ");
-    Serial.print(map(gz, 0, 65535, 0, 359)); Serial.print(", ");
-    Serial.print(map(mx, 0, 4095, 0, 359)+9); Serial.print(", ");
-    Serial.print(map(my, 0, 4095, 0, 359)+5); Serial.print(", ");
-    Serial.print(map(mz, 0, 4095, 0, 359)-2); Serial.print(", ");
+    Serial.print(ax); Serial.print(", ");
+    Serial.print(ay); Serial.print(", ");
+    Serial.print(az); Serial.print(", ");
+    Serial.print(gx); Serial.print(", ");
+    Serial.print(gy); Serial.print(", ");
+    Serial.print(gz); Serial.print(", ");
+    Serial.print(mx); Serial.print(", ");
+    Serial.print(my); Serial.print(", ");
+    Serial.print(mz); Serial.print(", ");
     
     if (digitalRead(buttonPin01) == HIGH){
       Serial.print(1); Serial.print(", ");
-    }
-    else{
+    } else {
       Serial.print(0); Serial.print(", ");
     }
     
